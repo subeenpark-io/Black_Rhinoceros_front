@@ -14,6 +14,7 @@ import { GlobalStyle } from 'styles/global-styles';
 
 import { HomePage } from './pages/HomePage/Loadable';
 import { NotFoundPage } from './components/NotFoundPage/Loadable';
+import FlowPage from './pages/FlowPage';
 import { useTranslation } from 'react-i18next';
 
 export function App() {
@@ -29,7 +30,7 @@ export function App() {
       </Helmet>
 
       <Switch>
-        <Route exact path="/" component={HomePage} />
+        <Route exact path="/" component={FlowPage} />
         <Route component={NotFoundPage} />
       </Switch>
       <GlobalStyle />

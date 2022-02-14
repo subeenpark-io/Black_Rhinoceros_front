@@ -41,6 +41,7 @@
     "react": "17.0.2",
     "react-app-polyfill": "3.0.0",
     "react-dom": "17.0.2",
+    "react-flow-renderer": "9.7.4",
     "react-helmet-async": "1.2.2",
     "react-i18next": "11.15.3",
     "react-is": "17.0.2",
@@ -120,5 +121,9 @@
         "statements": 90
       }
     }
+  },
+  "devDependencies": {
+    "eslint-config-react": "1.1.7",
+    "eslint-config-react-app": "7.0.0"
   }
 }
