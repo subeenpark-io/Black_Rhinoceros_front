@@ -1,0 +1,28 @@
+{
+  "id": "1",
+  "name": "test",
+  "nodes": [
+    {
+      "id": "1",
+      "data": {
+        "label": "data"
+      },
+      "moduleType": "data",
+      "position": { "x": 250, "y": 5 }
+    },
+    {
+      "id": "2",
+      "data": {
+        "label": "data"
+      },
+      "moduleType": "data",
+      "position": { "x": 250, "y": 30 }
+    }
+  ],
+  "edges": [
+    {
+      "sourcePort": "1:data",
+      "targetPort": "2:data"
+    }
+  ]
+}

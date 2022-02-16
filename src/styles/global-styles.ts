@@ -26,4 +26,26 @@ export const GlobalStyle = createGlobalStyle`
     font-family: inherit;
     font-size: inherit;
   }
+
+  .react-flow__node.selected > *{
+    border-color: #0041d0;
+    box-shadow: 0 0 0 0.5px #0041d0;
+  }
+
+  .react-flow__handle.connectable {
+    cursor: pointer;
+    transition: 0.1s;
+  }
+  .react-flow__handle.connectable:hover {
+    width: 10px;
+    height: 10px;
+  }
+
+  .react-flow__edge-path {
+    stroke-width: 2px;
+  }
+
+  .react-flow__connection-path {
+    stroke-width: 2px;
+  }
 `;

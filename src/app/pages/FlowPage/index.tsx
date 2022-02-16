@@ -1,124 +1,93 @@
-import React, { useState, MouseEvent } from 'react';
-
+import React, { useState, DragEvent } from 'react';
 import ReactFlow, {
-  removeElements,
+  ReactFlowProvider,
   addEdge,
-  isNode,
-  Background,
-  Elements,
-  BackgroundVariant,
-  FlowElement,
-  Node,
-  Edge,
-  Connection,
+  removeElements,
+  Controls,
   OnLoadParams,
+  Elements,
+  Connection,
+  Edge,
+  ElementId,
+  Node,
 } from 'react-flow-renderer';
+import styled from 'styled-components';
+import Sidebar from './Sidebar';
+import NodeTypes from 'app/components/CustomNodes/util/nodeTypes';
 
-const onNodeDragStop = (_: MouseEvent, node: Node) =>
-  console.log('drag stop', node);
-const onElementClick = (_: MouseEvent, element: FlowElement) =>
-  console.log('click', element);
+const initialElements = [];
 
-const initialElements: Elements = [
-  {
-    id: '1',
-    type: 'input',
-    data: { label: 'Node 1' },
-    position: { x: 250, y: 5 },
-    className: 'light',
-  },
-  {
-    id: '2',
-    data: { label: 'Node 2' },
-    position: { x: 100, y: 100 },
-    className: 'light',
-  },
-  {
-    id: '3',
-    data: { label: 'Node 3' },
-    position: { x: 400, y: 100 },
-    className: 'light',
-  },
-  {
-    id: '4',
-    data: { label: 'Node 4' },
-    position: { x: 400, y: 200 },
-    className: 'light',
-  },
-  { id: 'e1-2', source: '1', target: '2', animated: true },
-  { id: 'e1-3', source: '1', target: '3' },
-];
+const onDragOver = (event: DragEvent) => {
+  event.preventDefault();
+  event.dataTransfer.dropEffect = 'move';
+};
+
+let id = 0;
+const getId = (): ElementId => `dndnode_${id++}`;
 
 const FlowPage = () => {
-  const [rfInstance, setRfInstance] = useState<OnLoadParams | null>(null);
+  const [reactFlowInstance, setReactFlowInstance] = useState<OnLoadParams>();
   const [elements, setElements] = useState<Elements>(initialElements);
+
+  const onConnect = (params: Connection | Edge) =>
+    setElements(els => addEdge(params, els));
   const onElementsRemove = (elementsToRemove: Elements) =>
     setElements(els => removeElements(elementsToRemove, els));
-  const onConnect = (params: Edge | Connection) =>
-    setElements(els => addEdge(params, els));
-  const onLoad = (reactFlowInstance: OnLoadParams) =>
-    setRfInstance(reactFlowInstance);
+  const onLoad = (_reactFlowInstance: OnLoadParams) =>
+    setReactFlowInstance(_reactFlowInstance);
 
-  const updatePos = () => {
-    setElements(elms => {
-      return elms.map(el => {
-        if (isNode(el)) {
-          el.position = {
-            x: Math.random() * 400,
-            y: Math.random() * 400,
-          };
-        }
+  const onDrop = (event: DragEvent) => {
+    event.preventDefault();
 
-        return el;
+    if (reactFlowInstance) {
+      const type = event.dataTransfer.getData('application/reactflow');
+      const position = reactFlowInstance.project({
+        x: event.clientX - 250,
+        y: event.clientY - 20,
       });
-    });
-  };
+      const newNode: Node = {
+        id: getId(),
+        type,
+        position,
+        data: { label: `${type} node` },
+      };
 
-  const logToObject = () => console.log(rfInstance?.toObject());
-  const resetTransform = () =>
-    rfInstance?.setTransform({ x: 0, y: 0, zoom: 1 });
-
-  const toggleClassnames = () => {
-    setElements(elms => {
-      return elms.map(el => {
-        if (isNode(el)) {
-          el.className = el.className === 'light' ? 'dark' : 'light';
-        }
-
-        return el;
-      });
-    });
+      setElements(es => es.concat(newNode));
+    }
   };
 
   return (
-    <ReactFlow
-      elements={elements}
-      onLoad={onLoad}
-      onElementClick={onElementClick}
-      onElementsRemove={onElementsRemove}
-      onConnect={onConnect}
-      onNodeDragStop={onNodeDragStop}
-      className="react-flow-basic-example"
-      defaultZoom={1.5}
-      minZoom={0.2}
-      maxZoom={4}
-    >
-      <Background variant={BackgroundVariant.Lines} />
-
-      <div style={{ position: 'absolute', right: 10, top: 10, zIndex: 4 }}>
-        <button onClick={resetTransform} style={{ marginRight: 5 }}>
-          reset transform
-        </button>
-        <button onClick={updatePos} style={{ marginRight: 5 }}>
-          change pos
-        </button>
-        <button onClick={toggleClassnames} style={{ marginRight: 5 }}>
-          toggle classnames
-        </button>
-        <button onClick={logToObject}>toObject</button>
-      </div>
-    </ReactFlow>
+    <Container>
+      <ReactFlowProvider>
+        <Sidebar />
+        <Wrappper>
+          <ReactFlow
+            elements={elements}
+            onConnect={onConnect}
+            onElementsRemove={onElementsRemove}
+            onLoad={onLoad}
+            onDrop={onDrop}
+            onDragOver={onDragOver}
+            nodeTypes={NodeTypes}
+            deleteKeyCode={46}
+          >
+            <Controls />
+          </ReactFlow>
+        </Wrappper>
+      </ReactFlowProvider>
+    </Container>
   );
 };
 
 export default FlowPage;
+
+const Container = styled.div`
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+`;
+
+const Wrappper = styled.div`
+  height: 100%;
+  width: 100%;
+`;
