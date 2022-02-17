@@ -26,8 +26,10 @@ const onDragOver = (event: DragEvent) => {
   event.dataTransfer.dropEffect = 'move';
 };
 
+// 노드 아이디 생성
 let id = 0;
 const getId = (): ElementId => `dndnode_${id++}`;
+
 const FlowPage = () => {
   const [reactFlowInstance, setReactFlowInstance] = useState<OnLoadParams>();
   const [elements, setElements] = useState<Elements>(initialElements);
@@ -65,7 +67,11 @@ const FlowPage = () => {
   }, [elements.length]);
 
   const onConnect = (params: Edge | Connection) => {
-    setElements(els => addEdge(params, els));
+    const paramsWithArrow = {
+      ...params,
+      arrowHeadType: ArrowHeadType.ArrowClosed,
+    };
+    setElements(els => addEdge(paramsWithArrow, els));
   };
   const onElementsRemove = (elementsToRemove: Elements) =>
     setElements(els => removeElements(elementsToRemove, els));

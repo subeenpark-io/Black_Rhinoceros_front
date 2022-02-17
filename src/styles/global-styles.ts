@@ -49,11 +49,11 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .react-flow__edge-path {
-    stroke-width: 4px;
+    stroke-width: 2.5px;
   }
 
   .react-flow__connection-path {
-    stroke-width: 4px;
+    stroke-width: 2.5px;
   }
 
   .connected {
