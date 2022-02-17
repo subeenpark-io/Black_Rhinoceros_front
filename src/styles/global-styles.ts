@@ -52,6 +52,11 @@ export const GlobalStyle = createGlobalStyle`
     stroke-width: 2.5px;
   }
 
+  .react-flow__edge-path.hit {
+    stroke-width: 14px;
+    stroke: white;
+    opacity: 0;
+  }
   .react-flow__connection-path {
     stroke-width: 2.5px;
   }

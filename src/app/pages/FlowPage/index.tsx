@@ -18,6 +18,7 @@ import ReactFlow, {
 import styled from 'styled-components';
 import Sidebar from './Sidebar';
 import NodeTypes from 'app/components/CustomNodes/util/nodeTypes';
+import edgeTypes from 'app/components/CustomEdge/util/EdgeTypes';
 
 const initialElements = [];
 
@@ -67,11 +68,14 @@ const FlowPage = () => {
   }, [elements.length]);
 
   const onConnect = (params: Edge | Connection) => {
-    const paramsWithArrow = {
+    // 엣지 생성할때 params에서 커스텀해준다.
+    const customiseParams = {
       ...params,
+      type: 'custom',
       arrowHeadType: ArrowHeadType.ArrowClosed,
     };
-    setElements(els => addEdge(paramsWithArrow, els));
+
+    setElements(els => addEdge(customiseParams, els));
   };
   const onElementsRemove = (elementsToRemove: Elements) =>
     setElements(els => removeElements(elementsToRemove, els));
@@ -110,6 +114,7 @@ const FlowPage = () => {
             onDrop={onDrop}
             onDragOver={onDragOver}
             nodeTypes={NodeTypes}
+            edgeTypes={edgeTypes}
             deleteKeyCode={46}
           >
             <Controls />
