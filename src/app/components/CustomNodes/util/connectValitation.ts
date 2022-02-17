@@ -1,7 +1,8 @@
 import { Connection } from 'react-flow-renderer';
 
 export const isTargetDataSet = (connection: Connection) => {
-  return connection.targetHandle === 'dataset';
+  const splited = connection.targetHandle?.split(':')[0];
+  return splited === 'dataset';
 };
 
 export const isTargetUntrained = (connection: Connection) => {
@@ -13,7 +14,8 @@ export const isTargetTrained = (connection: Connection) => {
 };
 
 export const isSourceDataSet = (connection: Connection) => {
-  return connection.sourceHandle === 'dataset';
+  const splited = connection.sourceHandle?.split(':')[0];
+  return splited === 'dataset';
 };
 
 export const isSourceTrained = (connection: Connection) => {

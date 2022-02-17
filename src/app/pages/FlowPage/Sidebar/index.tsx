@@ -1,5 +1,6 @@
 import React, { DragEvent } from 'react';
 import styled from 'styled-components';
+import { ColorByCategory } from 'styles/colorByCategory';
 
 const onDragStart = (event: DragEvent, nodeType: string) => {
   event.dataTransfer.setData('application/reactflow', nodeType);
@@ -9,51 +10,64 @@ const onDragStart = (event: DragEvent, nodeType: string) => {
 const Sidebar = () => {
   return (
     <Aside>
-      <div className="description">data</div>
-      <DataItem
+      <Discription>data</Discription>
+      <NodeItem
         onDragStart={(event: DragEvent) => onDragStart(event, 'data')}
         draggable
+        style={{ backgroundColor: ColorByCategory.Data }}
       >
         Data
-      </DataItem>
+      </NodeItem>
+      <NodeItem
+        onDragStart={(event: DragEvent) => onDragStart(event, 'splitData')}
+        draggable
+        style={{ backgroundColor: ColorByCategory.Data }}
+      >
+        Split Data
+      </NodeItem>
 
-      <div className="description">model</div>
-      <ModelItem
+      <Discription>model</Discription>
+      <NodeItem
         onDragStart={(event: DragEvent) =>
           onDragStart(event, 'linearRegression')
         }
         draggable
+        style={{ backgroundColor: ColorByCategory.Model }}
       >
         Linear Regression
-      </ModelItem>
-      <ModelItem
+      </NodeItem>
+      <NodeItem
         onDragStart={(event: DragEvent) =>
           onDragStart(event, 'logisticRegression')
         }
         draggable
+        style={{ backgroundColor: ColorByCategory.Model }}
       >
         Logistic Regression
-      </ModelItem>
-      <ModelItem
+      </NodeItem>
+      <NodeItem
         onDragStart={(event: DragEvent) => onDragStart(event, 'trainModel')}
         draggable
+        style={{ backgroundColor: ColorByCategory.Model }}
       >
         Train Model
-      </ModelItem>
-      <div className="description">score</div>
-      <ScoreItem
+      </NodeItem>
+      <Discription>score</Discription>
+      <NodeItem
         onDragStart={(event: DragEvent) => onDragStart(event, 'scoreModel')}
         draggable
+        style={{ backgroundColor: ColorByCategory.Score }}
       >
         Score Model
-      </ScoreItem>
-      <div className="description">evaluate</div>
-      <EvaluateItem
+      </NodeItem>
+      <Discription>evaluate</Discription>
+      <NodeItem
         onDragStart={(event: DragEvent) => onDragStart(event, 'evaluateModel')}
         draggable
+        style={{ backgroundColor: ColorByCategory.Evaluate }}
       >
         Evaluate Model
-      </EvaluateItem>
+      </NodeItem>
     </Aside>
   );
 };
@@ -77,17 +91,9 @@ const NodeItem = styled.div`
   justify-content: center;
   align-items: center;
   height: 30px;
+  ${props => props.style?.backgroundColor}
 `;
 
-const DataItem = styled(NodeItem)`
-  background-color: #c9cad0;
-`;
-const ModelItem = styled(NodeItem)`
-  background-color: #e7efd2;
-`;
-const ScoreItem = styled(NodeItem)`
-  background-color: #d2e7ef;
-`;
-const EvaluateItem = styled(NodeItem)`
-  background-color: #e8d2ef;
+const Discription = styled.div`
+  user-select: none;
 `;

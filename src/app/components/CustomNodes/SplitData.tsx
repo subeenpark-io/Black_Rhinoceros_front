@@ -9,45 +9,45 @@ import {
 import { isSourceDataSet, isTargetDataSet } from './util/connectValitation';
 import { ColorByCategory } from 'styles/colorByCategory';
 
-const EvaluateModel: FC<NodeProps> = ({ data, isConnectable }) => {
+const SplitData: FC<NodeProps> = ({ data, isConnectable }) => {
   return (
     <Node>
       <Handle
         type="target"
         position={Position.Top}
-        id="dataset:1"
+        id="dataset"
         isConnectable={isConnectable}
-        style={leftHandle}
         isValidConnection={isSourceDataSet}
         className={
-          data.target.find(ele => ele === 'dataset:1') ? 'connected' : ''
+          data.target.find(ele => ele === 'dataset') ? 'connected' : ''
         }
       />
-      <Handle
-        type="target"
-        position={Position.Top}
-        id="dataset:2"
-        isConnectable={isConnectable}
-        style={rightHandle}
-        isValidConnection={isSourceDataSet}
-        className={
-          data.target.find(ele => ele === 'dataset:2') ? 'connected' : ''
-        }
-      />
-      <ColorBand style={{ backgroundColor: ColorByCategory.Evaluate }} />
-      <div>Evaluate Model</div>
+      <ColorBand style={{ backgroundColor: ColorByCategory.Data }} />
+      <div>Split Data</div>
       <Handle
         type="source"
         position={Position.Bottom}
-        id="trained"
+        id="dataset:1"
         isConnectable={isConnectable}
+        style={leftHandle}
         isValidConnection={isTargetDataSet}
         className={
-          data.source.find(ele => ele === 'trained') ? 'connected' : ''
+          data.source.find(ele => ele === 'dataset:1') ? 'connected' : ''
+        }
+      />
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        id="dataset:2"
+        isConnectable={isConnectable}
+        isValidConnection={isTargetDataSet}
+        style={rightHandle}
+        className={
+          data.source.find(ele => ele === 'dataset:2') ? 'connected' : ''
         }
       />
     </Node>
   );
 };
 
-export default memo(EvaluateModel);
+export default memo(SplitData);

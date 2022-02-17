@@ -2,6 +2,7 @@ import React, { memo, FC } from 'react';
 import { Handle, Position, NodeProps } from 'react-flow-renderer';
 import {
   Node,
+  ColorBand,
   leftHandle,
   rightHandle,
 } from 'app/components/CustomNodes/style';
@@ -10,6 +11,7 @@ import {
   isSourceDataSet,
   isTargetTrained,
 } from './util/connectValitation';
+import { ColorByCategory } from 'styles/colorByCategory';
 
 const TrainModel: FC<NodeProps> = ({ data, isConnectable }) => {
   return (
@@ -21,6 +23,9 @@ const TrainModel: FC<NodeProps> = ({ data, isConnectable }) => {
         isConnectable={isConnectable}
         style={leftHandle}
         isValidConnection={isSourceUntrained}
+        className={
+          data.target.find(ele => ele === 'untrained') ? 'connected' : ''
+        }
       />
       <Handle
         type="target"
@@ -29,7 +34,11 @@ const TrainModel: FC<NodeProps> = ({ data, isConnectable }) => {
         isConnectable={isConnectable}
         style={rightHandle}
         isValidConnection={isSourceDataSet}
+        className={
+          data.target.find(ele => ele === 'dataset') ? 'connected' : ''
+        }
       />
+      <ColorBand style={{ backgroundColor: ColorByCategory.Model }} />
       <div>Train Model</div>
       <Handle
         type="source"
@@ -37,6 +46,9 @@ const TrainModel: FC<NodeProps> = ({ data, isConnectable }) => {
         id="trained"
         isConnectable={isConnectable}
         isValidConnection={isTargetTrained}
+        className={
+          data.source.find(ele => ele === 'trained') ? 'connected' : ''
+        }
       />
     </Node>
   );

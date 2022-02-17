@@ -32,20 +32,31 @@ export const GlobalStyle = createGlobalStyle`
     box-shadow: 0 0 0 0.5px #0041d0;
   }
 
+  .react-flow__handle {
+    background: white;
+    border: 1px solid #555;
+    transition: 0.1s;
+    width: 10px;
+    height: 10px;
+  }
+  .react-flow__handle:hover {
+    width: 10px;
+    height: 10px;
+  }
   .react-flow__handle.connectable {
     cursor: pointer;
     transition: 0.1s;
   }
-  .react-flow__handle.connectable:hover {
-    width: 10px;
-    height: 10px;
-  }
 
   .react-flow__edge-path {
-    stroke-width: 2px;
+    stroke-width: 4px;
   }
 
   .react-flow__connection-path {
-    stroke-width: 2px;
+    stroke-width: 4px;
+  }
+
+  .connected {
+    background: #555;
   }
 `;
