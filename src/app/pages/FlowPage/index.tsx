@@ -12,7 +12,6 @@ import ReactFlow, {
   Connection,
   isEdge,
   isNode,
-  FlowElement,
   ArrowHeadType,
 } from 'react-flow-renderer';
 import styled from 'styled-components';
@@ -34,6 +33,11 @@ const getId = (): ElementId => `dndnode_${id++}`;
 const FlowPage = () => {
   const [reactFlowInstance, setReactFlowInstance] = useState<OnLoadParams>();
   const [elements, setElements] = useState<Elements>(initialElements);
+
+  const onElementsRemove = (elementsToRemove: Elements) =>
+    setElements(els => removeElements(elementsToRemove, els));
+  const onLoad = (_reactFlowInstance: OnLoadParams) =>
+    setReactFlowInstance(_reactFlowInstance);
 
   useEffect(() => {
     const nodes = elements.filter(el => isNode(el)) as Node[];
@@ -61,26 +65,36 @@ const FlowPage = () => {
     });
 
     setElements(els => [...newNodes, ...edges]);
-
-    // 일단 노드, 엣지가 추가되거나 삭제되면 실행하게끔 엘리먼츠 길이를 디펜던시로 잡음.
-    // 길이가 변하지 않는 업데이트가 있을 수 있다. (ex 엣지 업데이트)
+    // 일단 노드, 엣지가 추가되거나 삭제되면 실행하게끔 엘리먼츠 길이를 디펜던시로 잡았다.
+    // 길이가 변하지 않는 엘리먼츠 변화가 있을 수 있다. (ex 엣지 업데이트)
     // 추후에 관련 기능이 추가되면 수정해야 할듯.
   }, [elements.length]);
 
-  const onConnect = (params: Edge | Connection) => {
-    // 엣지 생성할때 params에서 커스텀해준다.
-    const customiseParams = {
+  const onConnect = async (params: Edge | Connection) => {
+    // 연결하려고 하는 포트의 엣지가 존제하면 그 엣지 삭제
+    const edges = elements.filter(ele => isEdge(ele)) as Edge[];
+    const paramsSourceId = (params.source as string) + params.sourceHandle;
+    const paramsTargetId = (params.target as string) + params.targetHandle;
+
+    // await 전구가 뜨지만 작동은 잘되는데,,,
+    // 삭제를 하고, 추가하는 순서
+    await edges.forEach(edge => {
+      if (edge.source + edge.sourceHandle === paramsSourceId) {
+        setElements(el => removeElements([edge], el));
+      }
+      if (edge.target + edge.targetHandle === paramsTargetId) {
+        setElements(el => removeElements([edge], el));
+      }
+    });
+
+    // 엣지는 params를 수청해서 커스텀한다.
+    const customizedParams = {
       ...params,
       type: 'custom',
       arrowHeadType: ArrowHeadType.ArrowClosed,
     };
-
-    setElements(els => addEdge(customiseParams, els));
+    setElements(els => addEdge(customizedParams, els));
   };
-  const onElementsRemove = (elementsToRemove: Elements) =>
-    setElements(els => removeElements(elementsToRemove, els));
-  const onLoad = (_reactFlowInstance: OnLoadParams) =>
-    setReactFlowInstance(_reactFlowInstance);
   const onDrop = (event: DragEvent) => {
     event.preventDefault();
 

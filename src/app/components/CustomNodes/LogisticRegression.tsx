@@ -1,23 +1,22 @@
 import React, { memo, FC } from 'react';
-import { Handle, Position, NodeProps } from 'react-flow-renderer';
+import { Position, NodeProps } from 'react-flow-renderer';
 import { Node, ColorBand } from 'app/components/CustomNodes/style';
 import { isTargetUntrained } from './util/connectValitation';
 import { ColorByCategory } from 'styles/colorByCategory';
+import Port from '../Port';
 
 const LogisticRegression: FC<NodeProps> = ({ data, isConnectable }) => {
   return (
     <Node>
       <ColorBand style={{ backgroundColor: ColorByCategory.Model }} />
       <div>Logistic Regression</div>
-      <Handle
+      <Port
+        data={data}
         type="source"
         position={Position.Bottom}
-        id="untrained"
+        portType="untrained"
         isConnectable={isConnectable}
         isValidConnection={isTargetUntrained}
-        className={
-          data.source.find(ele => ele === 'untrained') ? 'connected' : ''
-        }
       />
     </Node>
   );

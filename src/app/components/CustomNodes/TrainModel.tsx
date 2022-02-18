@@ -1,5 +1,5 @@
 import React, { memo, FC } from 'react';
-import { Handle, Position, NodeProps } from 'react-flow-renderer';
+import { Position, NodeProps } from 'react-flow-renderer';
 import {
   Node,
   ColorBand,
@@ -12,43 +12,38 @@ import {
   isTargetTrained,
 } from './util/connectValitation';
 import { ColorByCategory } from 'styles/colorByCategory';
+import Port from '../Port';
 
 const TrainModel: FC<NodeProps> = ({ data, isConnectable }) => {
   return (
     <Node>
-      <Handle
+      <Port
+        data={data}
         type="target"
         position={Position.Top}
-        id="untrained"
+        portType="untrained"
         isConnectable={isConnectable}
         style={leftHandle}
         isValidConnection={isSourceUntrained}
-        className={
-          data.target.find(ele => ele === 'untrained') ? 'connected' : ''
-        }
       />
-      <Handle
+      <Port
+        data={data}
         type="target"
         position={Position.Top}
-        id="dataset"
+        portType="dataset"
         isConnectable={isConnectable}
         style={rightHandle}
         isValidConnection={isSourceDataSet}
-        className={
-          data.target.find(ele => ele === 'dataset') ? 'connected' : ''
-        }
       />
       <ColorBand style={{ backgroundColor: ColorByCategory.Model }} />
       <div>Train Model</div>
-      <Handle
+      <Port
+        data={data}
         type="source"
         position={Position.Bottom}
-        id="trained"
+        portType="trained"
         isConnectable={isConnectable}
         isValidConnection={isTargetTrained}
-        className={
-          data.source.find(ele => ele === 'trained') ? 'connected' : ''
-        }
       />
     </Node>
   );

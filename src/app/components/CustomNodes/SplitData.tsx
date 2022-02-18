@@ -1,5 +1,5 @@
 import React, { memo, FC } from 'react';
-import { Handle, Position, NodeProps } from 'react-flow-renderer';
+import { Position, NodeProps } from 'react-flow-renderer';
 import {
   Node,
   ColorBand,
@@ -8,43 +8,38 @@ import {
 } from 'app/components/CustomNodes/style';
 import { isSourceDataSet, isTargetDataSet } from './util/connectValitation';
 import { ColorByCategory } from 'styles/colorByCategory';
+import Port from '../Port';
 
 const SplitData: FC<NodeProps> = ({ data, isConnectable }) => {
   return (
     <Node>
-      <Handle
+      <Port
+        data={data}
         type="target"
         position={Position.Top}
-        id="dataset"
+        portType="dataset"
         isConnectable={isConnectable}
         isValidConnection={isSourceDataSet}
-        className={
-          data.target.find(ele => ele === 'dataset') ? 'connected' : ''
-        }
       />
       <ColorBand style={{ backgroundColor: ColorByCategory.Data }} />
       <div>Split Data</div>
-      <Handle
+      <Port
+        data={data}
         type="source"
         position={Position.Bottom}
-        id="dataset:1"
+        portType="dataset:1"
         isConnectable={isConnectable}
         style={leftHandle}
         isValidConnection={isTargetDataSet}
-        className={
-          data.source.find(ele => ele === 'dataset:1') ? 'connected' : ''
-        }
       />
-      <Handle
+      <Port
+        data={data}
         type="source"
         position={Position.Bottom}
-        id="dataset:2"
+        portType="dataset:2"
         isConnectable={isConnectable}
         isValidConnection={isTargetDataSet}
         style={rightHandle}
-        className={
-          data.source.find(ele => ele === 'dataset:2') ? 'connected' : ''
-        }
       />
     </Node>
   );
