@@ -11,8 +11,8 @@ const useHover = (): [
 
   const bind = useMemo(
     () => ({
-      onMouseEnter: (e: MouseEvent) => void setHovered(true),
-      onMouseLeave: (e: MouseEvent) => void setHovered(false),
+      onMouseEnter: () => void setHovered(true),
+      onMouseLeave: () => void setHovered(false),
     }),
     [],
   );

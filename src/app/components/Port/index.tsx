@@ -1,4 +1,4 @@
-import React, { useState, CSSProperties, ReactElement } from 'react';
+import React, { useState, CSSProperties } from 'react';
 import { Handle, HandleProps } from 'react-flow-renderer';
 import { usePopper } from 'react-popper';
 import useHover from 'app/hooks/uesHover';
