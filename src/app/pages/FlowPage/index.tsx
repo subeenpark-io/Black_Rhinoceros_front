@@ -7,7 +7,6 @@ import ReactFlow, {
   OnLoadParams,
   Elements,
   Edge,
-  ElementId,
   Node,
   Connection,
   isEdge,
@@ -18,6 +17,7 @@ import styled from 'styled-components';
 import Sidebar from './Sidebar';
 import NodeTypes from 'app/components/CustomNodes/util/nodeTypes';
 import edgeTypes from 'app/components/CustomEdge/util/EdgeTypes';
+import { portDarkening, portColoring, getId } from './uitl';
 
 const initialElements = [];
 
@@ -26,40 +26,6 @@ const onDragOver = (event: DragEvent) => {
   event.dataTransfer.dropEffect = 'move';
 };
 
-const portColoring = (elements: Elements) => {
-  const nodes = elements.filter(ele => isNode(ele)) as Node[];
-  const edges = elements.filter(ele => isEdge(ele)) as Edge[];
-
-  // data의 scource, targe을 초기화 해서 모든 노드의 포트를 빈 포트로 만든다(색을 지운다).
-  const resetNodes = nodes.map(node => {
-    return { ...node, data: { ...node.data, source: [], target: [] } };
-  });
-
-  // 노드들과 엣지들을 모두 순회해서 포트들의 색을 다시 칠한다.
-  const newNodes = resetNodes.map(node => {
-    edges.forEach(edge => {
-      if (node.id === edge.source) {
-        node.data = {
-          ...node.data,
-          source: [...node.data.source, edge.sourceHandle],
-        };
-      } else if (node.id === edge.target) {
-        node.data = {
-          ...node.data,
-          target: [...node.data.target, edge.targetHandle],
-        };
-      }
-    });
-    return node;
-  });
-
-  return [...newNodes, ...edges];
-};
-
-// 노드 아이디 생성
-let id = 0;
-const getId = (): ElementId => `dndnode_${id++}`;
-
 const FlowPage = () => {
   const [reactFlowInstance, setReactFlowInstance] = useState<OnLoadParams>();
   const [elements, setElements] = useState<Elements>(initialElements);
@@ -67,9 +33,10 @@ const FlowPage = () => {
   const onElementsRemove = (elementsToRemove: Elements) => {
     const removedElements = removeElements(elementsToRemove, elements);
 
-    const portColoredElements = portColoring(removedElements);
+    const portColoredElements = portDarkening(removedElements);
     setElements(portColoredElements);
   };
+
   const onLoad = (_reactFlowInstance: OnLoadParams) =>
     setReactFlowInstance(_reactFlowInstance);
 
@@ -77,7 +44,10 @@ const FlowPage = () => {
     const nodes = elements.filter(ele => isNode(ele)) as Node[];
     const edges = elements.filter(ele => isEdge(ele)) as Edge[];
 
-    // 연결하려고 하는 포트의 엣지가 존재하면 그 엣지 삭제
+    // 출발하는 노드와 도착하는 노드가 같다면 취소
+    if (params.source === params.target) return;
+
+    // 연결하려고 하는 포트가 연결 되어 있는 포트라면 해당하는 엣지 삭제
     const paramsSourceId = (params.source as string) + params.sourceHandle;
     const paramsTargetId = (params.target as string) + params.targetHandle;
 
@@ -91,7 +61,7 @@ const FlowPage = () => {
       return true;
     });
 
-    // 엣지는 params를 수청해서 커스텀한다.
+    // 엣지는 params로 커스텀한다.
     const customizedParams = {
       ...params,
       type: 'custom',
@@ -102,7 +72,7 @@ const FlowPage = () => {
       ...removedEdges,
     ]);
 
-    const portColoredElements = portColoring(edgeAddedElements);
+    const portColoredElements = portDarkening(edgeAddedElements);
     setElements(portColoredElements);
   };
 
@@ -115,15 +85,39 @@ const FlowPage = () => {
         x: event.clientX - 250,
         y: event.clientY - 20,
       });
+
+      const nodeId = getId();
       const newNode: Node = {
-        id: getId(),
+        id: nodeId,
         type,
         position,
-        data: { label: `${type} node`, source: [], target: [] },
+        data: {
+          label: `${type} node`,
+          source: [],
+          target: [],
+          nodeId,
+        },
       };
 
       setElements(es => es.concat(newNode));
     }
+  };
+
+  const onConnectStart = (e: React.MouseEvent, { nodeId, handleType }) => {
+    const target = e.target as HTMLElement;
+    const startParams = {
+      nodeId,
+      handleType,
+      portType: target.dataset.handleid as string,
+    };
+
+    const coloredElements = portColoring(elements, startParams);
+    setElements(coloredElements);
+  };
+
+  const onConnectStop = () => {
+    const deColoredElements = portDarkening(elements);
+    setElements(deColoredElements);
   };
 
   return (
@@ -141,6 +135,8 @@ const FlowPage = () => {
             nodeTypes={NodeTypes}
             edgeTypes={edgeTypes}
             deleteKeyCode={46}
+            onConnectStart={onConnectStart}
+            onConnectStop={onConnectStop}
           >
             <Controls />
           </ReactFlow>

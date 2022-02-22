@@ -40,6 +40,20 @@ const Port = ({
     display: active ? 'block' : 'none',
   };
 
+  let connected = data[type].find(ele => ele === portType) ? 'connected' : '';
+  if (data.connectStart && data.connectStart.handleType !== type) {
+    const startPortType = data.connectStart.portType.split(':')[0];
+    const currentPortType = portType.split(':')[0];
+    if (
+      data.nodeId !== data.connectStart.nodeId &&
+      startPortType === currentPortType
+    ) {
+      connected = 'positive';
+    } else {
+      connected = 'negative';
+    }
+  }
+
   return (
     <>
       <Handle
@@ -48,7 +62,7 @@ const Port = ({
         id={portType}
         isConnectable={isConnectable}
         isValidConnection={isValidConnection}
-        className={data[type].find(ele => ele === portType) ? 'connected' : ''}
+        className={connected}
         style={style}
         ref={setReferenceElement}
         {...bind}
