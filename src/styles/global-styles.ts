@@ -36,16 +36,22 @@ export const GlobalStyle = createGlobalStyle`
     background: white;
     border: 1px solid #555;
     transition: 0.1s;
-    width: 10px;
-    height: 10px;
+    width: 13px;
+    height: 13px;
   }
   .react-flow__handle:hover {
-    width: 10px;
-    height: 10px;
+    width: 13px;
+    height: 13px;
   }
   .react-flow__handle.connectable {
     cursor: pointer;
     transition: 0.1s;
+  }
+  .react-flow__handle-bottom {
+    bottom:-6px;
+  }
+  .react-flow__handle-top {
+    top:-6px;
   }
 
   .react-flow__edge-path {
@@ -63,5 +69,14 @@ export const GlobalStyle = createGlobalStyle`
 
   .connected {
     background: #555;
+  }
+
+  .positive {
+    background: #30D158;
+    border: #30D158;
+  }
+  .negative {
+    background: #FF453A;
+    border: #FF453A;
   }
 `;
