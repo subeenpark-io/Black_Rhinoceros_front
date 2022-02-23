@@ -1,8 +1,8 @@
 import React, { useState, CSSProperties } from 'react';
 import { Handle, HandleProps } from 'react-flow-renderer';
-import { usePopper } from 'react-popper';
 import useHover from 'app/hooks/uesHover';
 import styled from 'styled-components';
+import { useTooltip } from './util';
 
 interface IPort extends HandleProps {
   data: any; // 데이터 구조 확정되고 타입 명시
@@ -23,22 +23,12 @@ const Port = ({
     null,
   );
   const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
-  const { styles, attributes } = usePopper(referenceElement, popperElement, {
-    placement: 'right',
-    modifiers: [
-      {
-        name: 'offset',
-        options: {
-          offset: [-8.5, 5],
-        },
-      },
-    ],
-  });
   const [active, bind] = useHover();
-
-  const display = {
-    display: active ? 'block' : 'none',
-  };
+  const { styles, attributes } = useTooltip(
+    referenceElement,
+    popperElement,
+    active,
+  );
 
   let connected = data[type].find(ele => ele === portType) ? 'connected' : '';
   if (data.connectStart && data.connectStart.handleType !== type) {
@@ -69,7 +59,7 @@ const Port = ({
       />
       <Tooltip
         ref={setPopperElement}
-        style={{ ...styles.popper, ...display }}
+        style={{ ...styles }}
         {...attributes.popper}
       >
         {portType}
