@@ -6,6 +6,7 @@ import {
   isEdge,
   ElementId,
 } from 'react-flow-renderer';
+import axios from 'axios';
 
 // 노드 아이디 생성
 let id = 0;
@@ -65,4 +66,19 @@ export const portDarkening = (elements: Elements) => {
   });
 
   return [...newNodes, ...edges];
+};
+
+/* eslint-disable @typescript-eslint/no-var-requires */
+const paramsFormData = require('./data.json');
+
+// axios
+//   .get(
+//     'http://ec2-13-124-117-119.ap-northeast-2.compute.amazonaws.com:8000/nodes/property',
+//   )
+//   .then(res => {
+//     console.log(res.data);
+//   });
+
+export const getParams = type => {
+  return paramsFormData[type];
 };

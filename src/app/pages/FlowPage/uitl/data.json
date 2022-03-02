@@ -1,0 +1,133 @@
+{
+  "splitData": [
+    {
+      "formType": "select",
+      "label": "Splitting mode",
+      "value": "Split Rows",
+      "options": [
+        {
+          "text": "Split Rows",
+          "value": "Split Rows"
+        }
+      ]
+    },
+    {
+      "formType": "input",
+      "label": "Fraction of rows in the first output dataset",
+      "value": "0.5",
+      "options": []
+    },
+    {
+      "formType": "input",
+      "label": "Random Seed",
+      "value": "0",
+      "options": []
+    },
+    {
+      "formType": "select",
+      "label": "Stratified Split",
+      "value": "false",
+      "options": [
+        {
+          "text": "false",
+          "value": "false"
+        },
+        {
+          "text": "true",
+          "value": "true"
+        }
+      ]
+    }
+  ],
+  "linearRegression": [
+    {
+      "formType": "select",
+      "label": "Solution method",
+      "value": "Onilne Gradient Descent",
+      "options": [
+        {
+          "text": "Onilne Gradient Descent",
+          "value": "Onilne Gradient Descent"
+        }
+      ]
+    },
+    {
+      "formType": "select",
+      "label": "Create trainer mode",
+      "value": "Single Parameter",
+      "options": [
+        {
+          "text": "Single Parameter",
+          "value": "Single Parameter"
+        }
+      ]
+    },
+    {
+      "formType": "input",
+      "label": "Learning rate",
+      "value": "0.1",
+      "options": []
+    },
+    {
+      "formType": "input",
+      "label": "Number of training epochs",
+      "value": "10",
+      "options": []
+    },
+    {
+      "formType": "input",
+      "label": "L2 regularization weight",
+      "value": "0.001",
+      "options": []
+    },
+    {
+      "formType": "input",
+      "label": "Random number seed",
+      "value": "1",
+      "options": []
+    }
+  ],
+  "logisticRegression": [
+    {
+      "formType": "select",
+      "label": "Create trainer mode",
+      "value": "Single Parameter",
+      "options": [
+        {
+          "text": "Single Parameter",
+          "value": "Single Parameter"
+        }
+      ]
+    },
+    {
+      "formType": "input",
+      "label": "Optimization tolerance",
+      "value": "1E-07",
+      "options": []
+    },
+    {
+      "formType": "input",
+      "label": "L1 regulazation weight",
+      "value": "1",
+      "options": []
+    },
+    {
+      "formType": "input",
+      "label": "L2 regularization weight",
+      "value": "1",
+      "options": []
+    },
+    {
+      "formType": "input",
+      "label": "Memory size for L-BFGS",
+      "value": "20",
+      "options": []
+    },
+    {
+      "formType": "input",
+      "label": "Random number seed",
+      "value": "",
+      "options": []
+    }
+  ]
+}
