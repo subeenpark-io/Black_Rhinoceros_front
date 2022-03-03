@@ -18,6 +18,8 @@ import Sidebar from './Sidebar';
 import NodeTypes from 'app/components/CustomNodes/util/nodeTypes';
 import edgeTypes from 'app/components/CustomEdge/util/EdgeTypes';
 import { portDarkening, portColoring, getId } from './uitl';
+import ParameterEditor from './ParameterEditor';
+import { getParams } from './uitl';
 
 const initialElements = [];
 
@@ -79,14 +81,17 @@ const FlowPage = () => {
   const onDrop = (event: DragEvent) => {
     event.preventDefault();
 
-    if (reactFlowInstance) {
-      const type = event.dataTransfer.getData('application/reactflow');
+    // sideBar 컴포넌트에서 set 한 노드 타입을 가져온다.
+    const type = event.dataTransfer.getData('application/reactflow');
+
+    if (type && reactFlowInstance) {
       const position = reactFlowInstance.project({
         x: event.clientX - 250,
         y: event.clientY - 20,
       });
 
       const nodeId = getId();
+      const params = getParams(type);
       const newNode: Node = {
         id: nodeId,
         type,
@@ -96,9 +101,9 @@ const FlowPage = () => {
           source: [],
           target: [],
           nodeId,
+          params,
         },
       };
-
       setElements(es => es.concat(newNode));
     }
   };
@@ -118,6 +123,10 @@ const FlowPage = () => {
   const onConnectStop = () => {
     const deColoredElements = portDarkening(elements);
     setElements(deColoredElements);
+  };
+
+  const onSetElemnts = (elements: Elements) => {
+    setElements(elements);
   };
 
   return (
@@ -141,6 +150,7 @@ const FlowPage = () => {
             <Controls />
           </ReactFlow>
         </Wrappper>
+        <ParameterEditor elements={elements} onSetElements={onSetElemnts} />
       </ReactFlowProvider>
     </Container>
   );
