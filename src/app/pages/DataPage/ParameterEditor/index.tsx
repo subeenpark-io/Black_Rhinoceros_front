@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useStoreState, isNode, Node } from 'react-flow-renderer';
 import styled from 'styled-components';
 import Input from '../../../components/Input';
-import Select from './Select';
+import Select from '../../../components/Select';
 
 type Option = {
   text: string;
@@ -110,6 +110,9 @@ const ParameterEditor = ({ elements, onSetElements }) => {
 
   return (
     <Aside>
+      <div>
+        <strong>Property</strong>
+      </div>
       <div>{selectedNode?.type}</div>
       <Form>{renderedParams}</Form>
     </Aside>
