@@ -5,10 +5,10 @@ import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
 import { GlobalStyle } from 'styles/global-styles';
 
 import { NotFoundPage } from '../../components/NotFoundPage/Loadable';
-import FlowPage from '../FlowPage';
+import DataPage from '../DataPage';
 import { useTranslation } from 'react-i18next';
 import { ReactFlowProvider } from 'react-flow-renderer';
-import Sidebar from '../FlowPage/Sidebar';
+import Widget from '../DataPage/Widget';
 import styled from 'styled-components';
 import Header from '../../components/Header';
 import UiCanvas from '../../components/UiCanvas';
@@ -27,12 +27,12 @@ export function App() {
       <ReactFlowProvider>
         <Header />
         <Container>
-          <Sidebar />
+          <Widget />
           <Switch>
             <Route exact path={'/'}>
               <Redirect to={'/data'} />
             </Route>
-            <Route exact path={'/data'} component={FlowPage} />
+            <Route exact path={'/data'} component={DataPage} />
             <Route exact path={'/ui'} component={UiCanvas} />
             <Route component={NotFoundPage} />
           </Switch>

@@ -1,6 +1,5 @@
 import React, { useState, DragEvent } from 'react';
 import ReactFlow, {
-  ReactFlowProvider,
   addEdge,
   removeElements,
   Controls,
@@ -14,7 +13,6 @@ import ReactFlow, {
   ArrowHeadType,
 } from 'react-flow-renderer';
 import styled from 'styled-components';
-import Sidebar from './Sidebar';
 import NodeTypes from 'app/components/CustomNodes/util/nodeTypes';
 import edgeTypes from 'app/components/CustomEdge/util/EdgeTypes';
 import { portDarkening, portColoring, getId } from './uitl';
@@ -28,7 +26,7 @@ const onDragOver = (event: DragEvent) => {
   event.dataTransfer.dropEffect = 'move';
 };
 
-const FlowPage = () => {
+const DataPage = () => {
   const [reactFlowInstance, setReactFlowInstance] = useState<OnLoadParams>();
   const [elements, setElements] = useState<Elements>(initialElements);
 
@@ -87,7 +85,7 @@ const FlowPage = () => {
     if (type && reactFlowInstance) {
       const position = reactFlowInstance.project({
         x: event.clientX - 250,
-        y: event.clientY - 20,
+        y: event.clientY - 80,
       });
 
       const nodeId = getId();
@@ -130,36 +128,33 @@ const FlowPage = () => {
   };
 
   return (
-    <Container>
-      <ReactFlowProvider>
-        <Sidebar />
-        <Wrappper>
-          <ReactFlow
-            elements={elements}
-            onConnect={onConnect}
-            onElementsRemove={onElementsRemove}
-            onLoad={onLoad}
-            onDrop={onDrop}
-            onDragOver={onDragOver}
-            nodeTypes={NodeTypes}
-            edgeTypes={edgeTypes}
-            deleteKeyCode={46}
-            onConnectStart={onConnectStart}
-            onConnectStop={onConnectStop}
-          >
-            <Controls />
-          </ReactFlow>
-        </Wrappper>
-        <ParameterEditor elements={elements} onSetElements={onSetElemnts} />
-      </ReactFlowProvider>
-    </Container>
+    <>
+      <Wrappper>
+        <ReactFlow
+          elements={elements}
+          onConnect={onConnect}
+          onElementsRemove={onElementsRemove}
+          onLoad={onLoad}
+          onDrop={onDrop}
+          onDragOver={onDragOver}
+          nodeTypes={NodeTypes}
+          edgeTypes={edgeTypes}
+          deleteKeyCode={46}
+          onConnectStart={onConnectStart}
+          onConnectStop={onConnectStop}
+        >
+          <Controls />
+        </ReactFlow>
+      </Wrappper>
+      <ParameterEditor elements={elements} onSetElements={onSetElemnts} />
+    </>
   );
 };
 
-export default FlowPage;
+export default DataPage;
 
 const Container = styled.div`
-  height: 100vh;
+  height: calc(100vh - 60px);
   display: flex;
   flex-direction: row;
 `;
