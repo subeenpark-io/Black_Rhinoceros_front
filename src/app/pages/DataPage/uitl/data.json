@@ -129,5 +129,13 @@
       "value": "",
       "options": []
     }
+  ],
+  "data": [
+    {
+      "formType": "upload",
+      "label": "upload",
+      "value": "",
+      "options": []
+    }
   ]
 }
