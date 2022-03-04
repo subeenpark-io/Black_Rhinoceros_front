@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useStoreState, isNode, Node } from 'react-flow-renderer';
 import styled from 'styled-components';
-import Input from '../../../components/Input';
-import Select from '../../../components/Select';
+import { Input, Select, DataUpload } from './forms';
 
 type Option = {
   text: string;
@@ -35,6 +34,15 @@ const takeForm = ({ formType, label, value, onChange, options, id }) => {
           value={value}
           onChange={onChange}
           options={options}
+        />
+      );
+    case 'upload':
+      return (
+        <DataUpload
+          key={label + id}
+          label={label}
+          value={value}
+          onChange={onChange}
         />
       );
     default:

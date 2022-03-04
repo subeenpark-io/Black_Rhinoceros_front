@@ -11,7 +11,6 @@ const Input = ({ value, label, onChange }) => {
         value={_value}
         name={label}
         onChange={e => {
-          const label = e.target.name;
           const value = e.target.value;
           setValue(value);
           onChange({ label, value });
