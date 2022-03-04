@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Label from 'app/components/Label';
 import { useDataUploadSlice } from './slice';
 import { useAppDispatch, useAppSelector } from 'app/hooks/useRedux';
@@ -8,6 +8,10 @@ const DataUpload = ({ value, label, onChange }) => {
   const { actions } = useDataUploadSlice();
   const dispatch = useAppDispatch();
   const { datasetId } = useAppSelector(state => state.dataUpload);
+
+  useEffect(() => {
+    onChange({ label, value: datasetId });
+  }, [datasetId]);
 
   const [_value, setValue] = useState(value);
   return (
