@@ -1,4 +1,5 @@
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
+import { DataUploadState } from 'app/pages/DataPage/Property/forms/DataUpload/slice/types';
 
 /* 
   Because the redux-injectors injects your reducers asynchronously somewhere in your code
@@ -6,5 +7,5 @@
 */
 export interface RootState {
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
-  dummy: () => 0;
+  dataUpload: DataUploadState;
 }
