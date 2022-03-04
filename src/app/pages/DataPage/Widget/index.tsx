@@ -1,26 +1,17 @@
 import React, { DragEvent } from 'react';
-import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { ColorByCategory } from 'styles/colorByCategory';
+import SelectPath from 'app/components/SelectPath';
 
 const onDragStart = (event: DragEvent, nodeType: string) => {
   event.dataTransfer.setData('application/reactflow', nodeType);
   event.dataTransfer.effectAllowed = 'move';
 };
-const Widget = () => {
-  const history = useHistory();
 
+const Widget = () => {
   return (
     <Aside>
-      <select
-        onChange={e => {
-          const path = e.target.value;
-          history.push(`/${path}`);
-        }}
-      >
-        <option value={'data'}>Data</option>
-        <option value={'ui'}>UI Widgets</option>
-      </select>
+      <SelectPath />
       <Discription>data</Discription>
       <NodeItem
         onDragStart={(event: DragEvent) => onDragStart(event, 'data')}

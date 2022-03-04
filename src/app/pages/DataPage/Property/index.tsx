@@ -42,7 +42,7 @@ const takeForm = ({ formType, label, value, onChange, options, id }) => {
   }
 };
 
-const ParameterEditor = ({ elements, onSetElements }) => {
+const Property = ({ elements, onSetElements }) => {
   const selectedElements = useStoreState(store => store.selectedElements);
 
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
@@ -119,7 +119,7 @@ const ParameterEditor = ({ elements, onSetElements }) => {
   );
 };
 
-export default ParameterEditor;
+export default Property;
 
 const Aside = styled.aside`
   border-left: 1px solid #eee;

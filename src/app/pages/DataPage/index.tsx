@@ -15,9 +15,9 @@ import ReactFlow, {
 import styled from 'styled-components';
 import NodeTypes from 'app/components/CustomNodes/util/nodeTypes';
 import edgeTypes from 'app/components/CustomEdge/util/EdgeTypes';
-import { portDarkening, portColoring, getId } from './uitl';
-import ParameterEditor from './ParameterEditor';
-import { getParams } from './uitl';
+import { portDarkening, portColoring, getId, getParams } from './uitl';
+import Property from './Property';
+import Widget from './Widget';
 
 const initialElements = [];
 
@@ -128,7 +128,8 @@ const DataPage = () => {
   };
 
   return (
-    <>
+    <Container>
+      <Widget />
       <Wrappper>
         <ReactFlow
           elements={elements}
@@ -146,8 +147,8 @@ const DataPage = () => {
           <Controls />
         </ReactFlow>
       </Wrappper>
-      <ParameterEditor elements={elements} onSetElements={onSetElemnts} />
-    </>
+      <Property elements={elements} onSetElements={onSetElemnts} />
+    </Container>
   );
 };
 

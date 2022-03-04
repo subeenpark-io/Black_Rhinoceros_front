@@ -1,6 +1,5 @@
 import React from 'react';
 import { Stage, Layer, Rect, Transformer } from 'react-konva';
-import styled from 'styled-components';
 
 const Rectangle = ({ shapeProps, isSelected, onSelect, onChange }) => {
   const shapeRef = React.useRef<any>();
@@ -18,7 +17,8 @@ const Rectangle = ({ shapeProps, isSelected, onSelect, onChange }) => {
     <React.Fragment>
       <Rect
         onClick={onSelect}
-        onTap={onSelect}
+        // onTap={onSelect}
+        onMouseDown={onSelect}
         ref={shapeRef}
         {...shapeProps}
         draggable
@@ -85,15 +85,10 @@ const initialRectangles = [
     id: 'rect2',
   },
 ];
-const Property = () => {
-  return (
-    <Aside>
-      <div>
-        <strong>Property</strong>
-      </div>
-    </Aside>
-  );
-};
+
+const widgetWidth = 200;
+const propertyWidth = 300;
+const headerHeight = 60;
 
 const UiCanvas = () => {
   const [rectangles, setRectangles] = React.useState(initialRectangles);
@@ -108,47 +103,33 @@ const UiCanvas = () => {
   };
 
   return (
-    <>
-      <Stage
-        width={window.innerWidth - 500}
-        height={window.innerHeight - 70}
-        onMouseDown={checkDeselect}
-        onTouchStart={checkDeselect}
-      >
-        <Layer>
-          {rectangles.map((rect, i) => {
-            return (
-              <Rectangle
-                key={i}
-                shapeProps={rect}
-                isSelected={rect.id === selectedId}
-                onSelect={() => {
-                  selectShape(rect.id);
-                }}
-                onChange={newAttrs => {
-                  const rects = rectangles.slice();
-                  rects[i] = newAttrs;
-                  setRectangles(rects);
-                }}
-              />
-            );
-          })}
-        </Layer>
-      </Stage>
-      <Property />
-    </>
+    <Stage
+      width={window.innerWidth - (widgetWidth + propertyWidth)}
+      height={window.innerHeight - headerHeight}
+      onMouseDown={checkDeselect}
+      onTouchStart={checkDeselect}
+    >
+      <Layer>
+        {rectangles.map((rect, i) => {
+          return (
+            <Rectangle
+              key={i}
+              shapeProps={rect}
+              isSelected={rect.id === selectedId}
+              onSelect={() => {
+                selectShape(rect.id);
+              }}
+              onChange={newAttrs => {
+                const rects = rectangles.slice();
+                rects[i] = newAttrs;
+                setRectangles(rects);
+              }}
+            />
+          );
+        })}
+      </Layer>
+    </Stage>
   );
 };
 
 export default UiCanvas;
-
-const Aside = styled.aside`
-  border-left: 1px solid #eee;
-  padding: 15px 10px;
-  font-size: 14px;
-  background: #fcfcfc;
-  display: flex;
-  flex-direction: column;
-  min-width: 300px;
-  max-width: 300px;
-`;
