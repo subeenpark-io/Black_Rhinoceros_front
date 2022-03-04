@@ -22,7 +22,6 @@ const Select = React.forwardRef<HTMLSelectElement, ISelect>((props, ref) => {
         value={_value}
         ref={ref}
         onChange={e => {
-          const label = e.target.name;
           const value = e.target.value;
           setValue(value);
           onChange({ label, value });
