@@ -8,10 +8,8 @@ import { NotFoundPage } from '../../components/NotFoundPage/Loadable';
 import DataPage from '../DataPage';
 import { useTranslation } from 'react-i18next';
 import { ReactFlowProvider } from 'react-flow-renderer';
-import Widget from '../DataPage/Widget';
-import styled from 'styled-components';
 import Header from '../../components/Header';
-import UiCanvas from '../../components/UiCanvas';
+import UiPage from '../UiPage';
 
 export function App() {
   const { i18n } = useTranslation();
@@ -26,25 +24,16 @@ export function App() {
       </Helmet>
       <ReactFlowProvider>
         <Header />
-        <Container>
-          <Widget />
-          <Switch>
-            <Route exact path={'/'}>
-              <Redirect to={'/data'} />
-            </Route>
-            <Route exact path={'/data'} component={DataPage} />
-            <Route exact path={'/ui'} component={UiCanvas} />
-            <Route component={NotFoundPage} />
-          </Switch>
-        </Container>
+        <Switch>
+          <Route exact path={'/'}>
+            <Redirect to={'/data'} />
+          </Route>
+          <Route exact path={'/data'} component={DataPage} />
+          <Route exact path={'/ui'} component={UiPage} />
+          <Route component={NotFoundPage} />
+        </Switch>
       </ReactFlowProvider>
       <GlobalStyle />
     </BrowserRouter>
   );
 }
-
-const Container = styled.div`
-  height: calc(100vh - 60px);
-  display: flex;
-  flex-direction: row;
-`;
