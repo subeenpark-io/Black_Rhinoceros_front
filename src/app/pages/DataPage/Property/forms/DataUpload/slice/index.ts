@@ -14,12 +14,12 @@ const slice = createSlice({
   name: 'dataUpload',
   initialState,
   reducers: {
-    postDatasetRequest: (state, _action) => {
+    postDatasetRequest: (state, _action: PayloadAction<FormData>) => {
       state.loading = true;
     },
-    postDatasetSuccess: (state, action) => {
+    postDatasetSuccess: (state, action: PayloadAction<{ _id: string }>) => {
       state.loading = false;
-      state.datasetId = action.payload;
+      state.datasetId = action.payload._id;
     },
     postDatasetFail: (state, action) => {
       state.loading = false;

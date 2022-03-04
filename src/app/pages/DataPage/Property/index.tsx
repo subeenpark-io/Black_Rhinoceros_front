@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useStoreState, isNode, Node } from 'react-flow-renderer';
 import styled from 'styled-components';
-import { Input, Select, DataUpload } from './forms';
+import takeForm from './forms';
 
 type Option = {
   text: string;
@@ -14,41 +14,6 @@ interface IParameter {
   options: Option[];
   value: string;
 }
-
-const takeForm = ({ formType, label, value, onChange, options, id }) => {
-  switch (formType) {
-    case 'input':
-      return (
-        <Input
-          key={label + id}
-          label={label}
-          value={value}
-          onChange={onChange}
-        />
-      );
-    case 'select':
-      return (
-        <Select
-          key={label + id}
-          label={label}
-          value={value}
-          onChange={onChange}
-          options={options}
-        />
-      );
-    case 'upload':
-      return (
-        <DataUpload
-          key={label + id}
-          label={label}
-          value={value}
-          onChange={onChange}
-        />
-      );
-    default:
-      return;
-  }
-};
 
 const Property = ({ elements, onSetElements }) => {
   const selectedElements = useStoreState(store => store.selectedElements);
