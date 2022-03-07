@@ -25,6 +25,9 @@ const slice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    resetDatasetId: state => {
+      state.datasetId = null;
+    },
   },
 });
 
