@@ -136,6 +136,12 @@
       "label": "upload",
       "value": "",
       "options": []
+    },
+    {
+      "formType": "multiSelect",
+      "label": "target select",
+      "value": "",
+      "options": []
     }
   ]
 }

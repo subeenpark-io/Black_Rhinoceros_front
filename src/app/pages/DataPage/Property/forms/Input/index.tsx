@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Label from 'app/components/Label';
 
-const Input = ({ value, label, onChange }) => {
+const Input = ({ value, label, onParamsChange }) => {
   const [_value, setValue] = useState(value);
 
   return (
@@ -13,7 +13,7 @@ const Input = ({ value, label, onChange }) => {
         onChange={e => {
           const value = e.target.value;
           setValue(value);
-          onChange({ label, value });
+          onParamsChange({ label, value });
         }}
       />
     </>

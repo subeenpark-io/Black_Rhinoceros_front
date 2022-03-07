@@ -15,13 +15,26 @@ interface IParameter {
   value: string;
 }
 
+export interface IChangedParams {
+  label: string;
+  value?: string;
+  options?: Option[];
+}
 const Property = ({ elements, onSetElements }) => {
   const selectedElements = useStoreState(store => store.selectedElements);
 
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
-  const [renderedParams, setRenderedParams] = useState<any>();
-  const [labelValue, setLabelValue] =
-    useState<{ label: string; value: string }>();
+  const [renderedParams, setRenderedParams] = useState<JSX.Element[]>();
+  const [changedParams, setChangedParams] = useState<IChangedParams>();
+
+  useEffect(() => {
+    if (selectedNode) {
+      const updateSelectedNode = elements.find(
+        ele => ele.id === selectedNode.id,
+      );
+      setSelectedNode(updateSelectedNode);
+    }
+  }, [elements]);
 
   // 노드를 클릭하면 클릭한 노드로 업데이트한다
   useEffect(() => {
@@ -36,32 +49,28 @@ const Property = ({ elements, onSetElements }) => {
   useEffect(() => {
     const params: IParameter[] = selectedNode?.data.params;
 
-    const renderedParams = params ? (
-      params.map(param => {
-        return takeForm({ ...param, onChange, id: selectedNode?.id });
-      })
-    ) : (
-      <div></div>
-    );
+    const renderedParams = params?.map(param => {
+      return takeForm({ ...param, onParamsChange, id: selectedNode?.id });
+    });
 
     setRenderedParams(renderedParams);
   }, [selectedNode]);
 
   // 사용자가 값을 입력하면 해당 노드의 파라미터 값을 업데이트하고,전체 엘리먼트에 저장한다.
-  const onChange = ({ label, value }) => {
-    setLabelValue({ label, value });
+  const onParamsChange = (params: IChangedParams) => {
+    setChangedParams({ ...params });
   };
 
   useEffect(() => {
-    if (labelValue) {
-      const { label, value } = labelValue;
+    if (changedParams) {
+      const { label } = changedParams;
       const updatedNode = {
         ...selectedNode,
         data: {
           ...selectedNode?.data,
           params: selectedNode?.data.params.map(param => {
             if (param.label === label) {
-              return { ...param, label, value };
+              return { ...param, ...changedParams };
             } else {
               return param;
             }
@@ -79,7 +88,7 @@ const Property = ({ elements, onSetElements }) => {
 
       onSetElements(newElements);
     }
-  }, [labelValue]);
+  }, [changedParams]);
 
   return (
     <Aside>
