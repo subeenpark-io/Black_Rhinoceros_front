@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Label from 'app/components/Label';
+import { IChangedParams } from '../..';
 
 export type Option = { text: string; value: string };
 
@@ -7,11 +8,11 @@ interface ISelect {
   label: string;
   value: string;
   options: Option[];
-  onChange: ({ label, value }) => void;
+  onParamsChange: (changedParams: IChangedParams) => void;
 }
 
 const Select = React.forwardRef<HTMLSelectElement, ISelect>((props, ref) => {
-  const { value, label, options, onChange } = props;
+  const { value, label, options, onParamsChange } = props;
   const [_value, setValue] = useState(value);
 
   return (
@@ -24,7 +25,7 @@ const Select = React.forwardRef<HTMLSelectElement, ISelect>((props, ref) => {
         onChange={e => {
           const value = e.target.value;
           setValue(value);
-          onChange({ label, value });
+          onParamsChange({ label, value });
         }}
       >
         {options.map(({ text, value }) => (
