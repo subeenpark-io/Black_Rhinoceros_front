@@ -2,8 +2,9 @@ import React from 'react';
 import Input from './Input';
 import Select from './Select';
 import DataUpload from './DataUpload';
+import MultiSelect from './MultiSelect';
 
-const takeForm = ({ formType, label, value, onChange, options, id }) => {
+const takeForm = ({ formType, label, value, onParamsChange, options, id }) => {
   switch (formType) {
     case 'input':
       return (
@@ -11,7 +12,7 @@ const takeForm = ({ formType, label, value, onChange, options, id }) => {
           key={label + id}
           label={label}
           value={value}
-          onChange={onChange}
+          onParamsChange={onParamsChange}
         />
       );
     case 'select':
@@ -20,7 +21,7 @@ const takeForm = ({ formType, label, value, onChange, options, id }) => {
           key={label + id}
           label={label}
           value={value}
-          onChange={onChange}
+          onParamsChange={onParamsChange}
           options={options}
         />
       );
@@ -30,11 +31,21 @@ const takeForm = ({ formType, label, value, onChange, options, id }) => {
           key={label + id}
           label={label}
           value={value}
-          onChange={onChange}
+          onParamsChange={onParamsChange}
+        />
+      );
+    case 'multiSelect':
+      return (
+        <MultiSelect
+          key={label + id}
+          label={label}
+          value={value}
+          onParamsChange={onParamsChange}
+          options={options}
         />
       );
     default:
-      return;
+      return <div>no component for this formType</div>;
   }
 };
 
