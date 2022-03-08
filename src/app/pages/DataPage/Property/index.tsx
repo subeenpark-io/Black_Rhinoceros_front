@@ -17,7 +17,7 @@ interface IParameter {
 
 export interface IChangedParams {
   label: string;
-  value?: string;
+  value?: any;
   options?: Option[];
 }
 const Property = ({ elements, onSetElements }) => {
