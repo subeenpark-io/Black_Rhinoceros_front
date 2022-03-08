@@ -1,34 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useStoreState } from 'react-flow-renderer';
+import { useDatapageSlice } from 'app/pages/DataPage/slice';
+import { useAppDispatch } from 'app/hooks/useRedux';
 
 const Header = () => {
-  // saga flow 에서 가공해야함. 일단은 실행하는것 먼저 구현
-  const unprocessedNodes = useStoreState(store => store.nodes);
-  const unproccedEdges = useStoreState(store => store.edges);
-  const runDag = () => {
-    const nodes = unprocessedNodes.map(node => {
-      return {
-        id: node.id,
-        moduleType: node.type,
-        position: node.position,
-        data: { label: node.data.label, params: node.data.params },
-      };
-    });
+  const nodes = useStoreState(store => store.nodes);
+  const edges = useStoreState(store => store.edges);
 
-    const edges = unproccedEdges.map(edge => {
-      return {
-        sourcePort: {
-          nodeId: edge.source,
-          portType: edge.sourceHandle,
-        },
-        targetPort: {
-          nodeId: edge.target,
-          portType: edge.targetHandle,
-        },
-      };
-    });
-    console.log({ nodes, edges });
+  const { actions } = useDatapageSlice();
+  const dispatch = useAppDispatch();
+
+  const runDag = () => {
+    dispatch(
+      actions.tyrRunDagRequest({
+        id: '',
+        name: 'test',
+        nodes,
+        edges,
+      }),
+    );
   };
 
   return (
