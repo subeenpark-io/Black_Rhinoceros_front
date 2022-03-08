@@ -1,4 +1,4 @@
-import React, { useState, DragEvent } from 'react';
+import React, { useState, DragEvent, useEffect } from 'react';
 import ReactFlow, {
   addEdge,
   removeElements,
@@ -18,6 +18,8 @@ import edgeTypes from 'app/components/CustomEdge/util/EdgeTypes';
 import { portDarkening, portColoring, getId, getParams } from './uitl';
 import Property from './Property';
 import Widget from './Widget';
+import { useDatapageSlice } from './slice';
+import { useAppDispatch, useAppSelector } from 'app/hooks/useRedux';
 
 const initialElements = [];
 
@@ -29,6 +31,15 @@ const onDragOver = (event: DragEvent) => {
 const DataPage = () => {
   const [reactFlowInstance, setReactFlowInstance] = useState<OnLoadParams>();
   const [elements, setElements] = useState<Elements>(initialElements);
+
+  const { actions } = useDatapageSlice();
+  const dispatch = useAppDispatch();
+
+  const state = useAppSelector(state => state.datapage);
+
+  useEffect(() => {
+    dispatch(actions.fetchParamFormRequest());
+  }, []);
 
   const onElementsRemove = (elementsToRemove: Elements) => {
     const removedElements = removeElements(elementsToRemove, elements);
@@ -89,7 +100,9 @@ const DataPage = () => {
       });
 
       const nodeId = getId();
-      const params = getParams(type);
+
+      const params = getParams(type); // json 으로
+      // const params = parameterForm && parameterForm[type];
       const newNode: Node = {
         id: nodeId,
         type,
