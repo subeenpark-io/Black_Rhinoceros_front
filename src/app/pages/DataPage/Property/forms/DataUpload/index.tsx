@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Label from 'app/components/Label';
-import { useDataUploadSlice } from './slice';
 import { useAppDispatch, useAppSelector } from 'app/hooks/useRedux';
+import { useDatapageSlice } from 'app/pages/DataPage/slice';
 
 // upload form 은 데이터베이스 id 를 value 에 저장한다.
 const DataUpload = ({ value, label, onParamsChange }) => {
-  const { actions } = useDataUploadSlice();
+  const { actions } = useDatapageSlice();
   const dispatch = useAppDispatch();
-  const { datasetId } = useAppSelector(state => state.dataUpload);
+  const { datasetId } = useAppSelector(state => state.datapage);
 
   useEffect(() => {
     if (datasetId && datasetId.length > 0) {
@@ -28,7 +28,6 @@ const DataUpload = ({ value, label, onParamsChange }) => {
         name={label}
         onChange={e => {
           const files = e.target.files;
-
           if (files && files[0]) {
             const formData = new FormData();
             formData.append('dataset', files[0]);

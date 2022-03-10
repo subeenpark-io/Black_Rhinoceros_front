@@ -15,10 +15,18 @@ type ModuleName =
   | 'logisticRegression'
   | 'data';
 
+export interface IColumnAttribute {
+  name: string;
+  type: string;
+  isFeature: true;
+}
+
 export interface DatapageState {
   elements: Elements;
   resultId: string | null;
   loading: boolean;
   error: Error | null;
   parameterForm: Record<ModuleName, IForm> | null;
+  datasetId: string | null;
+  columnAttributes: IColumnAttribute[] | null;
 }

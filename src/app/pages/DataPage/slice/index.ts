@@ -3,6 +3,7 @@ import { createSlice } from 'utils/@reduxjs/toolkit';
 import { DatapageState } from './types';
 import { useInjectReducer, useInjectSaga } from 'redux-injectors';
 import { DatapageSaga } from './saga';
+import { IColumnAttribute } from './types';
 
 export const initialState: DatapageState = {
   elements: [],
@@ -10,12 +11,15 @@ export const initialState: DatapageState = {
   loading: false,
   error: null,
   parameterForm: null,
+  datasetId: null,
+  columnAttributes: null,
 };
 
 const slice = createSlice({
   name: 'datapage',
   initialState,
   reducers: {
+    // dag 실행
     tyrRunDagRequest: (state, _action) => {
       state.loading = true;
     },
@@ -27,6 +31,8 @@ const slice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+
+    // 파라미터 양식 fetch
     fetchParamFormRequest: state => {
       state.loading = true;
     },
@@ -37,6 +43,44 @@ const slice = createSlice({
     fetchParamFormFail: (state, action) => {
       state.loading = false;
       state.error = action.payload;
+    },
+
+    // 데이터 업로드
+    postDatasetRequest: (state, _action: PayloadAction<FormData>) => {
+      state.loading = true;
+    },
+    postDatasetSuccess: (state, action: PayloadAction<{ _id: string }>) => {
+      state.loading = false;
+      state.datasetId = action.payload._id;
+    },
+    postDatasetFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    resetDatasetId: state => {
+      state.datasetId = null;
+    },
+
+    // multi select 컬럼 fetch
+    fetchColAttrsRequest: (
+      state,
+      _action: PayloadAction<{ datasetId: string }>,
+    ) => {
+      state.loading = true;
+    },
+    fetchColAtrrsSuccess: (
+      state,
+      action: PayloadAction<{ columnAttributes: IColumnAttribute[] }>,
+    ) => {
+      state.loading = false;
+      state.columnAttributes = action.payload.columnAttributes;
+    },
+    fetchColAttrsFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    resetColAttrs: state => {
+      state.columnAttributes = null;
     },
   },
 });

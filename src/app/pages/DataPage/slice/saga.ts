@@ -1,5 +1,10 @@
 import { call, put, takeLatest, all } from 'redux-saga/effects';
-import { getParamForm, tryRunDag } from './api';
+import {
+  getParamForm,
+  tryRunDag,
+  postDataset,
+  getColumnAttributes,
+} from './api';
 import { actions } from '.';
 
 const getDagData = ({ id, name, nodes, edges }) => {
@@ -54,9 +59,33 @@ export function* fetchParamFormSaga() {
   }
 }
 
+export function* postDatasetSaga(action) {
+  const dataset = action.payload;
+
+  try {
+    const response = yield call(postDataset, dataset);
+    yield put(actions.postDatasetSuccess(response.data));
+  } catch (error) {
+    yield put(actions.postDatasetFail(error));
+  }
+}
+
+export function* fetchColAttrsSaga(action) {
+  const { datasetId } = action.payload;
+
+  try {
+    const response = yield call(getColumnAttributes, { datasetId });
+    yield put(actions.fetchColAtrrsSuccess(response.data));
+  } catch (error) {
+    yield put(actions.fetchColAttrsFail(error));
+  }
+}
+
 export function* DatapageSaga() {
   yield all([
     takeLatest(actions.tyrRunDagRequest.type, tryRunDagSaga),
     takeLatest(actions.fetchParamFormRequest.type, fetchParamFormSaga),
+    takeLatest(actions.postDatasetRequest.type, postDatasetSaga),
+    takeLatest(actions.fetchColAttrsRequest.type, fetchColAttrsSaga),
   ]);
 }

@@ -35,8 +35,6 @@ const DataPage = () => {
   const { actions } = useDatapageSlice();
   const dispatch = useAppDispatch();
 
-  const state = useAppSelector(state => state.datapage);
-
   useEffect(() => {
     dispatch(actions.fetchParamFormRequest());
   }, []);
