@@ -1,6 +1,5 @@
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
-import { DataUploadState } from 'app/pages/DataPage/Property/forms/DataUpload/slice/types';
-import { MultiSelectState } from 'app/pages/DataPage/Property/forms/MultiSelect/slice/types';
+import { DatapageState } from 'app/pages/DataPage/slice/types';
 
 /* 
   Because the redux-injectors injects your reducers asynchronously somewhere in your code
@@ -8,6 +7,5 @@ import { MultiSelectState } from 'app/pages/DataPage/Property/forms/MultiSelect/
 */
 export interface RootState {
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
-  dataUpload: DataUploadState;
-  multiSelect: MultiSelectState;
+  datapage: DatapageState;
 }

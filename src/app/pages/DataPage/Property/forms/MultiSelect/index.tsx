@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import Label from 'app/components/Label';
 import { useAppDispatch, useAppSelector } from 'app/hooks/useRedux';
-import { useMultiSeclectSlice } from './slice';
 import { IChangedParams } from '../..';
+import { useDatapageSlice } from 'app/pages/DataPage/slice';
 
 export type Option = { text: string; value: string };
 
 interface ISelect {
   label: string;
-  value: string;
+  value: any;
   options: Option[];
   onParamsChange: (changedParams: IChangedParams) => void;
 }
@@ -19,11 +19,12 @@ const MultiSelect = React.forwardRef<HTMLSelectElement, ISelect>(
     const [_value, setValue] = useState(value);
     const [_options, setOptions] = useState(options);
 
-    const { actions } = useMultiSeclectSlice();
+    const { actions } = useDatapageSlice();
     const dispatch = useAppDispatch();
 
-    const { datasetId } = useAppSelector(state => state.dataUpload);
-    const { columnAttributes } = useAppSelector(state => state.multiSelect);
+    const { datasetId, columnAttributes } = useAppSelector(
+      state => state.datapage,
+    );
 
     useEffect(() => {
       if (datasetId && datasetId.length > 0) {
@@ -56,7 +57,7 @@ const MultiSelect = React.forwardRef<HTMLSelectElement, ISelect>(
           onChange={e => {
             const value = e.target.value;
             setValue(value);
-            onParamsChange({ label, value });
+            onParamsChange({ label, value: [value] });
           }}
         >
           {_options.map(({ text, value }) => (

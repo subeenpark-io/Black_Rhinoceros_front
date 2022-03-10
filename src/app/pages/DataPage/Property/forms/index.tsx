@@ -45,7 +45,7 @@ const takeForm = ({ formType, label, value, onParamsChange, options, id }) => {
         />
       );
     default:
-      return <div>no component for this formType</div>;
+      return <div key={label + id}>no component for this formType</div>;
   }
 };
 
