@@ -1,8 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useStoreState } from 'react-flow-renderer';
 import { useDatapageSlice } from 'app/pages/DataPage/slice';
-import { useAppDispatch } from 'app/hooks/useRedux';
+import { useAppDispatch, useAppSelector } from 'app/hooks/useRedux';
+import { useGlobalSlice } from 'app/pages/App/slice';
+
+const SelectUser = () => {
+  const { actions } = useGlobalSlice();
+  const dispatch = useAppDispatch();
+  const { currentUser } = useAppSelector(state => state.global);
+
+  const [value, setValue] = useState(currentUser);
+
+  return (
+    <Select
+      value={value}
+      onChange={e => {
+        const user = e.target.value;
+        setValue(user);
+        dispatch(actions.changeUser(user));
+      }}
+    >
+      <option value={'user1'}>User 1</option>
+      <option value={'user2'}>User 2</option>
+      <option value={'user3'}>User 3</option>
+    </Select>
+  );
+};
 
 const Header = () => {
   const nodes = useStoreState(store => store.nodes);
@@ -27,6 +51,7 @@ const Header = () => {
       <LeftWrapper />
       <RightWrapper>
         <Button onClick={runDag}>Run</Button>
+        <SelectUser />
       </RightWrapper>
     </Container>
   );
@@ -58,4 +83,8 @@ const Button = styled.button`
   width: 70px;
   height: 30px;
   border-radius: 4px;
+`;
+
+const Select = styled.select`
+  margin-left: 20px;
 `;
