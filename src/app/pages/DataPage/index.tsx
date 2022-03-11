@@ -11,6 +11,7 @@ import ReactFlow, {
   isEdge,
   isNode,
   ArrowHeadType,
+  ReactFlowProps,
 } from 'react-flow-renderer';
 import styled from 'styled-components';
 import NodeTypes from 'app/components/CustomNodes/util/nodeTypes';
@@ -20,6 +21,9 @@ import Property from './Property';
 import Widget from './Widget';
 import { useDatapageSlice } from './slice';
 import { useAppDispatch, useAppSelector } from 'app/hooks/useRedux';
+import DagStateBar from './DagStateBar';
+import { useGlobalSlice } from '../App/slice';
+import { usePrevious } from 'app/hooks/usePrevious';
 
 const initialElements = [];
 
@@ -29,11 +33,44 @@ const onDragOver = (event: DragEvent) => {
 };
 
 const DataPage = () => {
+  const { currentUser, users } = useAppSelector(state => state.global);
+
   const [reactFlowInstance, setReactFlowInstance] = useState<OnLoadParams>();
-  const [elements, setElements] = useState<Elements>(initialElements);
+  const [elements, setElements] = useState<Elements>(users[currentUser]);
 
   const { actions } = useDatapageSlice();
   const dispatch = useAppDispatch();
+
+  const {
+    parameterForm,
+    dagStatusLoading,
+    elements: elementsToSync,
+  } = useAppSelector(state => state.datapage);
+
+  useEffect(() => {
+    dispatch(actions.setElements(elements));
+  }, [elements]);
+
+  // 유저 select 할때 elements 상태 저장
+  const { actions: globalActions } = useGlobalSlice();
+  const prevUser = usePrevious(currentUser) || 'user1';
+  useEffect(() => {
+    // 유저를 select 할 때 이전 유저의 elements 저장
+    dispatch(globalActions.setUserData({ elements, user: prevUser }));
+
+    // 선택한 유저 elements 불러오기
+    setElements(users[currentUser]);
+  }, [currentUser]);
+
+  // 노드, 엣지 추가 될때 elements 상태 저장
+  useEffect(() => {
+    dispatch(
+      globalActions.setUserData({
+        elements: elementsToSync,
+        user: currentUser,
+      }),
+    );
+  }, [elementsToSync]);
 
   useEffect(() => {
     dispatch(actions.fetchParamFormRequest());
@@ -94,13 +131,13 @@ const DataPage = () => {
     if (type && reactFlowInstance) {
       const position = reactFlowInstance.project({
         x: event.clientX - 250,
-        y: event.clientY - 80,
+        y: event.clientY - 130,
       });
 
       const nodeId = getId();
 
-      const params = getParams(type); // json 으로
-      // const params = parameterForm && parameterForm[type];
+      // const params = getParams(type); // json 으로
+      const params = parameterForm && parameterForm[type];
       const newNode: Node = {
         id: nodeId,
         type,
@@ -138,10 +175,21 @@ const DataPage = () => {
     setElements(elements);
   };
 
+  const freezeCanvas = {
+    elementsSelectable: false,
+    nodesConnectable: false,
+    nodesDraggable: false,
+    zoomOnScroll: false,
+    zoomOnDoubleClick: false,
+    paneMoveable: false,
+    panOnScroll: false,
+  };
+
   return (
     <Container>
       <Widget />
       <Wrappper>
+        <DagStateBar />
         <ReactFlow
           elements={elements}
           onConnect={onConnect}
@@ -154,6 +202,7 @@ const DataPage = () => {
           deleteKeyCode={46}
           onConnectStart={onConnectStart}
           onConnectStop={onConnectStop}
+          {...(dagStatusLoading ? freezeCanvas : null)}
         >
           <Controls />
         </ReactFlow>
@@ -172,6 +221,8 @@ const Container = styled.div`
 `;
 
 const Wrappper = styled.div`
+  display: flex;
+  flex-direction: column;
   height: 100%;
   width: 100%;
 `;

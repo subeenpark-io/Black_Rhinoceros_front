@@ -29,4 +29,8 @@ export interface DatapageState {
   parameterForm: Record<ModuleName, IForm> | null;
   datasetId: string | null;
   columnAttributes: IColumnAttribute[] | null;
+  dagStatus: string | null;
+  dagStatusLoading: boolean;
+  dagStatusError: Error | null;
+  dagStatusSuccessful: boolean;
 }

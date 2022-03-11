@@ -22,12 +22,13 @@ export const portColoring = (elements: Elements, startParams: IStartParams) => {
   const edges = elements.filter(ele => isEdge(ele)) as Edge[];
 
   const newNodes = nodes.map(node => {
-    node.data = {
-      ...node.data,
-      connectStart: startParams,
+    return {
+      ...node,
+      data: {
+        ...node.data,
+        connectStart: startParams,
+      },
     };
-
-    return node;
   });
 
   return [...newNodes, ...edges];

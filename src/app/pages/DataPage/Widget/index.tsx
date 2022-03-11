@@ -2,6 +2,7 @@ import React, { DragEvent } from 'react';
 import styled from 'styled-components';
 import { ColorByCategory } from 'styles/colorByCategory';
 import SelectPath from 'app/components/SelectPath';
+import { useAppSelector } from 'app/hooks/useRedux';
 
 const onDragStart = (event: DragEvent, nodeType: string) => {
   event.dataTransfer.setData('application/reactflow', nodeType);
@@ -9,23 +10,26 @@ const onDragStart = (event: DragEvent, nodeType: string) => {
 };
 
 const Widget = () => {
+  // 데그 실행중에 드래그 기능 정지
+  const { dagStatusLoading } = useAppSelector(state => state.datapage);
+
   return (
     <Aside>
       <SelectPath />
       <Discription>data</Discription>
       <NodeItem
         onDragStart={(event: DragEvent) => onDragStart(event, 'data')}
-        draggable
+        draggable={!dagStatusLoading}
         style={{ backgroundColor: ColorByCategory.Data }}
       >
-        Data
+        <Label>Data</Label>
       </NodeItem>
       <NodeItem
         onDragStart={(event: DragEvent) => onDragStart(event, 'splitData')}
-        draggable
+        draggable={!dagStatusLoading}
         style={{ backgroundColor: ColorByCategory.Data }}
       >
-        Split Data
+        <Label>Split Data</Label>
       </NodeItem>
 
       <Discription>model</Discription>
@@ -33,42 +37,42 @@ const Widget = () => {
         onDragStart={(event: DragEvent) =>
           onDragStart(event, 'linearRegression')
         }
-        draggable
+        draggable={!dagStatusLoading}
         style={{ backgroundColor: ColorByCategory.Model }}
       >
-        Linear Regression
+        <Label>Linear Regression</Label>
       </NodeItem>
       <NodeItem
         onDragStart={(event: DragEvent) =>
           onDragStart(event, 'logisticRegression')
         }
-        draggable
+        draggable={!dagStatusLoading}
         style={{ backgroundColor: ColorByCategory.Model }}
       >
-        Logistic Regression
+        <Label>Logistic Regression</Label>
       </NodeItem>
       <NodeItem
         onDragStart={(event: DragEvent) => onDragStart(event, 'trainModel')}
-        draggable
+        draggable={!dagStatusLoading}
         style={{ backgroundColor: ColorByCategory.Model }}
       >
-        Train Model
+        <Label>Train Model</Label>
       </NodeItem>
       <Discription>score</Discription>
       <NodeItem
         onDragStart={(event: DragEvent) => onDragStart(event, 'scoreModel')}
-        draggable
+        draggable={!dagStatusLoading}
         style={{ backgroundColor: ColorByCategory.Score }}
       >
-        Score Model
+        <Label>Score Model</Label>
       </NodeItem>
       <Discription>evaluate</Discription>
       <NodeItem
         onDragStart={(event: DragEvent) => onDragStart(event, 'evaluateModel')}
-        draggable
+        draggable={!dagStatusLoading}
         style={{ backgroundColor: ColorByCategory.Evaluate }}
       >
-        Evaluate Model
+        <Label>Evaluate Model</Label>
       </NodeItem>
     </Aside>
   );
@@ -94,6 +98,10 @@ const NodeItem = styled.div`
   align-items: center;
   height: 30px;
   ${props => props.style?.backgroundColor}
+`;
+
+const Label = styled.label`
+  user-select: none;
 `;
 
 const Discription = styled.div`

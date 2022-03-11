@@ -13,6 +13,10 @@ export const initialState: DatapageState = {
   parameterForm: null,
   datasetId: null,
   columnAttributes: null,
+  dagStatus: null,
+  dagStatusLoading: false,
+  dagStatusError: null,
+  dagStatusSuccessful: false,
 };
 
 const slice = createSlice({
@@ -22,14 +26,24 @@ const slice = createSlice({
     // dag 실행
     tyrRunDagRequest: (state, _action) => {
       state.loading = true;
+
+      // 임시로, 데그 상태 주기적으로 요청하는 api 생기면 수정해야함.
+      state.dagStatusLoading = true;
+      state.dagStatusSuccessful = false;
     },
     tryRunDagSuccess: (state, action) => {
       state.loading = false;
       state.resultId = action.payload.result_id;
+
+      state.dagStatusLoading = false;
+      state.dagStatusSuccessful = true;
     },
     tryRunDagFail: (state, action) => {
       state.loading = false;
       state.error = action.payload;
+
+      state.dagStatusLoading = false;
+      state.dagStatusSuccessful = false;
     },
 
     // 파라미터 양식 fetch
@@ -81,6 +95,10 @@ const slice = createSlice({
     },
     resetColAttrs: state => {
       state.columnAttributes = null;
+    },
+
+    setElements: (state, action) => {
+      state.elements = action.payload;
     },
   },
 });
