@@ -16,8 +16,8 @@ const slice = createSlice({
   reducers: {
     // dag 실행
     setUserData: (state, action) => {
-      const { elements, prevUser } = action.payload;
-      state.users[prevUser] = elements;
+      const { elements, user } = action.payload;
+      state.users[user] = elements;
     },
 
     changeUser: (state, action) => {
