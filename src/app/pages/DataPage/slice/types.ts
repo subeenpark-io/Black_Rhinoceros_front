@@ -23,7 +23,7 @@ export interface IColumnAttribute {
 
 export interface DatapageState {
   elements: Elements;
-  resultId: string | null;
+  resultId: string | string[] | null;
   loading: boolean;
   error: Error | null;
   parameterForm: Record<ModuleName, IForm> | null;
