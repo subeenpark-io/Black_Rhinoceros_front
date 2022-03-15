@@ -175,14 +175,25 @@ const DataPage = () => {
     setElements(elements);
   };
 
-  const freezeCanvas = {
-    elementsSelectable: false,
-    nodesConnectable: false,
-    nodesDraggable: false,
-    zoomOnScroll: false,
-    zoomOnDoubleClick: false,
-    paneMoveable: false,
-    panOnScroll: false,
+  // const freezeCanvas = {
+  //   elementsSelectable: false,
+  //   nodesConnectable: false,
+  //   nodesDraggable: false,
+  //   zoomOnScroll: false,
+  //   zoomOnDoubleClick: false,
+  //   paneMoveable: false,
+  //   panOnScroll: false,
+  // };
+  const freezeCanvas = (isLoading: boolean) => {
+    return {
+      elementsSelectable: isLoading,
+      nodesConnectable: isLoading,
+      nodesDraggable: isLoading,
+      zoomOnScroll: isLoading,
+      zoomOnDoubleClick: isLoading,
+      paneMoveable: isLoading,
+      panOnScroll: isLoading,
+    };
   };
 
   return (
@@ -191,6 +202,9 @@ const DataPage = () => {
       <Wrappper>
         <DagStateBar />
         <ReactFlow
+          onContextMenu={e => {
+            e.preventDefault();
+          }}
           elements={elements}
           onConnect={onConnect}
           onElementsRemove={onElementsRemove}
@@ -202,7 +216,8 @@ const DataPage = () => {
           deleteKeyCode={46}
           onConnectStart={onConnectStart}
           onConnectStop={onConnectStop}
-          {...(dagStatusLoading ? freezeCanvas : null)}
+          // {...(dagStatusLoading ? freezeCanvas : null)}
+          {...freezeCanvas(!dagStatusLoading)}
         >
           <Controls />
         </ReactFlow>
